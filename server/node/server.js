@@ -42,9 +42,14 @@ app.get('/checkout-session', async (req, res) => {
 });
 
 app.post('/create-checkout-session', async (req, res) => {
-  const domainURL = process.env.DOMAIN;
+  // const domainURL = process.env.DOMAIN;
+  const createDomain = await stripe.applePayDomains.create({
+    domain_name: process.env.DOMAIN,
+  });
 
-  const { quantity, locale } = req.body;
+  const domainURL = await createDomain.domain_name;
+
+  const { quantity } = req.body;
   // Create new Checkout Session for the order
   // Other optional params include:
   // [billing_address_collection] - to display billing address details on the page
